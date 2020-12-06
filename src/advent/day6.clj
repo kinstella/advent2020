@@ -13,8 +13,6 @@
 
 ;; part two
 ;;  -- where a question exists per line
-;; 
-;; 
 
 (defn xsect-each-group [groupanswers]
   (apply set/intersection (map set groupanswers)))
