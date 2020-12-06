@@ -3,17 +3,12 @@
             [clojure.set :as set]))
 
 (def data (slurp "resources/day6/input.txt"))
-data
-
 (def groups (str/split data #"\n\n"))
-groups
-
 (def answers (map #(str/split % #"\n") groups))
-answers
-
 
 (def allsets (map #(-> (apply str %) set) answers))
 (def thesums (map count allsets))
+
 (reduce + thesums)
 
 ;; part two
