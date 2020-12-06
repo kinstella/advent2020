@@ -37,3 +37,5 @@
     {:row row :seatcol seatcol :seatid seatid}))
 
 (def occupied (set (map (comp :seatid findseat) passes)))
+
+(set/difference (set (range 73 827)) occupied)
