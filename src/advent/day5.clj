@@ -13,15 +13,6 @@
     (subvec rows 0  (/ (count rows) 2))
     (subvec rows (/ (count rows) 2))))
 
-;; ;; todo == do this with reduce?
-;; (defn get-row [rowstr rows]
-;;   (loop [remrows rows
-;;          remstr rowstr]
-;;     (if (<= (count remrows) 2)
-;;       (get-half (first remstr) remrows)
-;;       (recur (get-half (first remstr) remrows)
-;;              (rest remstr)))))
-
 (defn traverse [str dataset]
   (loop [remset dataset
          remstr str]
