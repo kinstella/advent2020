@@ -1,7 +1,8 @@
-(ns advent.day2)
+(ns advent.day2
+  (:require [clojure.string :as str]))
 
 (def data (slurp "resources/day2/input.txt"))
-(def lines (clojure.string/split data #"\n"))
+(def lines (str/split data #"\n"))
 
 (defn lines-to-spec [lines]
   (map (fn [l] (zipmap [:min :max :letter :nada :pw] (clojure.string/split (clojure.string/replace l #"[:-]" " ") #" "))) lines))
