@@ -10,14 +10,13 @@
     {:qty itemcount :bagtype (first theitem)}))
 
 (defn codify-rules [bagdesc]
-  (let [bagdesc (str/replace bagdesc #"[.]" "")
+  (let [bagdesc (str/replace bagdesc #"[.]|bags|bag" "")
         [thebag & [containables]] (map str/trim (str/split bagdesc #"contain"))
+        thebag (str/trim thebag)
         items (str/split containables #", ")
+        items (map str/trim items)
         containrules (map get-item-counts items)]
     {:bag thebag :contents containrules}))
-
-(def cargorules (map codify-rules bags))
-(count cargorules)
 
 (defn can-contain-bag? [bagcontents bagstr]
   (some (fn [bagcontent] (= bagstr (:bagtype bagcontent))) bagcontents))
@@ -36,11 +35,6 @@
                        (map :bag (find-bags-in-rules rules (first bagstofind))))
                (into containerset (map :bag  (find-bags-in-rules rules (first bagstofind)))))))))
 
-(find-bags-in-bags cargorules "shiny gold bags")
-;(map :bag (find-bags-in-rules cargorules "shiny gold bags"))
-;(map :bag (take 10 cargorules ))
-
-;(take 2 cargorules)
-;
-;
-(find-bags-in-rules cargorules "shiny gold bags")
+;; do the things
+(def cargorules (map codify-rules bags))
+(find-bags-in-bags cargorules "shiny gold")
