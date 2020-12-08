@@ -7,7 +7,9 @@
 
 (defn get-item-counts [item]
   (let [[itemcount & theitem] (str/split item #" " 2)]
-    {:qty itemcount :bagtype (first theitem)}))
+    {:qty (if (= "no" itemcount)
+            0
+            (Integer/parseInt itemcount)) :bagtype (first theitem)}))
 
 (defn codify-rules [bagdesc]
   (let [bagdesc (str/replace bagdesc #"[.]|bags|bag" "")
@@ -35,6 +37,27 @@
                        (map :bag (find-bags-in-rules rules (first bagstofind))))
                (into containerset (map :bag  (find-bags-in-rules rules (first bagstofind)))))))))
 
-;; do the things
+;; part 2
+(defn get-bag-rule [rules bagname]
+  (filter (fn [rule] (= (:bag rule) bagname)) rules))
+
+(defn count-contained-bags [rules bagname]
+  (loop [bagstoinvestigate (conj [] {:bagtype bagname :qty 1})
+         bagsincluded #{}
+         bagcount 0]
+    (println "bags to investigate: " bagstoinvestigate)
+    (println "bag count so far: " bagcount)
+    (if (< (count bagstoinvestigate) 1)
+      {:count bagcount :bagsincluded bagsincluded}
+      (do
+        (println "Looking at bag: " (first bagstoinvestigate) "?")
+        (let [newbagcontents (:contents (first (get-bag-rule rules (:bagtype (first bagstoinvestigate)))))]
+          (recur (concat (rest bagstoinvestigate) newbagcontents)
+                 (into bagsincluded (get-bag-rule rules (:bagtype (first bagstoinvestigate))))
+                 (+ bagcount (:qty (first bagstoinvestigate)))))))))
+
 (def cargorules (map codify-rules bags))
 (find-bags-in-bags cargorules "shiny gold")
+;; do the things
+(count-contained-bags cargorules "shiny gold")
+
