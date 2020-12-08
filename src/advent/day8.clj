@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.set :as set]))
 
-(def data (slurp "resources/day8/input.txt"))
+(def data (slurp "resources/day8/revised.txt"))
 (def instructions (str/split data #"\n"))
 (def accumulator (atom 0))
 (def executed (atom #{}))
@@ -12,6 +12,7 @@
   (for [i (range (count instrs))]
     (let [[opcode opval] (str/split (nth instrs i) #" ")]
       {:line i :opcode opcode :opval (Integer/parseInt opval)})))
+
 (def instmap (inst-to-map instructions))
 
 (defn jmp
@@ -26,7 +27,6 @@
   (nth instmap (inc curline)))
 
 (defn processop [curop instmap]
-  (println "now executing " curop)
   (cond (= (:opcode curop) "jmp")
         (jmp (:line curop) instmap (:opval curop))
 
@@ -40,8 +40,6 @@
   (reset! accumulator 0)
   (reset! executed #{})
   (loop [optoexec initop]
-    (println "optoexec is:" optoexec)
-    (println "EXECUTED lines are:" @executed)
     (if (contains? @executed (:line optoexec))
       @accumulator
       (do
