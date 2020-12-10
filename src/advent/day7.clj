@@ -56,8 +56,12 @@
                  (into bagsincluded (get-bag-rule rules (:bagtype (first bagstoinvestigate))))
                  (+ bagcount (:qty (first bagstoinvestigate)))))))))
 
-(def cargorules (map codify-rules bags))
-(find-bags-in-bags cargorules "shiny gold")
+(comment
+  
+  (def cargorules (map codify-rules bags))
+  (find-bags-in-bags cargorules "shiny gold")
 ;; do the things
-(count-contained-bags cargorules "shiny gold")
+  (count-contained-bags cargorules "shiny gold")
+  
+#_endcomment)
 

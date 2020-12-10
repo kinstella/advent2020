@@ -4,7 +4,7 @@
 
 (def data (slurp "resources/day9/input.txt"))
 (def allnums (map #(Long/parseLong %) (str/split data #"\n")))
-(def allnums (take 1000 allnums))
+;(def allnums (take 1000 allnums))
 
 (defn find-addends [numset thesum]
   (for [x (range (count numset))]
@@ -42,17 +42,19 @@
     (do (println "starting at: " startnum)
         (loop [endnum startnum]
           ;(println "looking at this set:" (subvec (vec allnums) startnum endnum))
-          (println "startnum" startnum "endnum: " endnum)
-          (let [thesumresult 100000 #_(apply + (subvec allnums startnum endnum))]
+          ;(println "startnum" startnum "endnum: " endnum)
+          (let [thesumresult (apply + (subvec allnums startnum endnum))]
             ;(println "the sum result: " thesumresult)
             (cond (> thesumresult numtofind)
-                  (println "sum is too high")
+                  (println "sum is too high" thesumresult)
 
                   (> endnum (count allnums)) ;(apply + (subvec (vec allnums) startnum endnum)))
-                  (println "reached end of numset")
+                  (println "reached end of numset" endnum)
                   
                   (= thesumresult numtofind)
-                  (println "found the number!" thesumresult)
+                  (do (println "found the number!" thesumresult "started with " startnum "ended with " endnum )
+                      (println "startnum is" (nth allnums startnum) "endnum is" (nth allnums endnum))
+                      (println "vec is: "  (sort (subvec allnums startnum endnum))))
                   
                   :else
                     (recur (inc endnum))))))))
@@ -61,4 +63,3 @@
 (def numtofind 26134589)
 
 (find-contig-addends (vec allnums) numtofind)
-
