@@ -40,6 +40,7 @@
   (reset! accumulator 0)
   (reset! executed #{})
   (loop [optoexec initop]
+    (println "now executing: " optoexec)
     (if (contains? @executed (:line optoexec))
       @accumulator
       (do
