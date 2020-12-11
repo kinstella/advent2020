@@ -32,3 +32,12 @@
 (count-intervals adapters)
 @diff1
 @diff3
+
+
+(defn count-combinations [alladapters]
+  (let [adapterset (sort alladapters)]
+    
+    
+    )
+  
+  )
