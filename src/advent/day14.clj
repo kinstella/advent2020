@@ -12,36 +12,35 @@
 (defn data-from-memline [memline]
   (let [[addrpart binarypart] (split memline #"] = ")]
     {:addr
-     (->  addrpart
-          (clojure.string/replace "mem[" "")
-          (Integer/parseInt))
+     (-> addrpart
+         (clojure.string/replace "mem[" "")
+         (Integer/parseInt))
      :data
      (-> binarypart
          (Integer/parseInt)
          (Integer/toBinaryString))}))
 
 (defn lpadx [bin-str len]
-  (str (join  (repeat (- len (count bin-str)) "0")) bin-str))
+  (str (join (repeat (- len (count bin-str)) "0")) bin-str))
 
 (defn binstr->bin [binstr]
   (Long/parseUnsignedLong binstr 2))
 
 (defn sum-memlocs [memvals]
-  (reduce +  (map binstr->bin (vals memvals))))
+  (reduce + (map binstr->bin (vals memvals))))
 
 (defn newval-after-bitmask
   "apply the new value into the current addr bit string while respecting the mask"
   [bitmask value]
-  ;(println "-------------------------")
   (let [paddedval (lpadx value 36)]
-    (join  (map (fn [mask newval]
-                  (if
+    (join (map (fn [mask newval]
+                 (if
 
-                   (not= mask \X)
-                    mask
+                  (not= mask \X)
+                   mask
 
-                    newval))
-                bitmask paddedval))))
+                   newval))
+               bitmask paddedval))))
 
 (defn load-data [lines]
   (loop [remlines lines
@@ -59,7 +58,6 @@
             (let [bin-str (data-from-memline x)
                   curval (or (get memvals (:addr bin-str)) (repeat 36 "0"))
                   newmemval (newval-after-bitmask curmask (:data bin-str))]
-              ;(println "newmemval" newmemval)
               (recur (rest remlines)
                      (assoc memvals (:addr bin-str) newmemval)
                      curmask))))))))
